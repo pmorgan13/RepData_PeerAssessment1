@@ -7,7 +7,8 @@ output:
 
 
 ## Loading and preprocessing the data
-```{r,echo = TRUE}
+
+```r
 # Reading Data and converting Character dates to date objects
 data <- read.csv('activity.csv',header = TRUE)
 data$date <- as.Date(data$date,'%Y-%m-%d')
@@ -15,7 +16,8 @@ data$date <- as.Date(data$date,'%Y-%m-%d')
 
 
 ## What is mean total number of steps taken per day?
-```{r,echo = TRUE}
+
+```r
 ## Making Histogram
 dates <- unique(data$date)
 count <- 0
@@ -28,17 +30,30 @@ for (x in dates){
 hist(dailyMeans,main = "Histogram of Mean Daily Steps Taken",xlab = 'Steps Taken')
 ```
 
-```{r,echo = TRUE}
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+
+```r
 ## Reporting Mean
 mean(dailyMeans,na.rm = TRUE)
 ```
 
-```{r,echo = TRUE}
+```
+## [1] 10766.19
+```
+
+
+```r
 ## Reporting Median
 median(dailyMeans,na.rm = TRUE)
 ```
+
+```
+## [1] 10765
+```
 ## What is the average daily activity pattern?
-```{r,echo=TRUE}
+
+```r
 #Plotting Daily Activity
 times <- unique(data$interval)
 count <- 0
@@ -51,20 +66,33 @@ for (x in times){
 plot(times,stepsByTime,type = 'l',xlab = 'Interval',ylab = 'Mean Number of Steps',main = 'Steps by Time Interval')
 ```
 
-```{r,echo = TRUE}
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+
+```r
 ## Finding Time of max average steps
 maxIndex <- which(stepsByTime == max(stepsByTime))
 times[maxIndex]
 ```
+
+```
+## [1] 835
+```
 As you can see from the plot and the output of the code, the time interval with the most average steps is 8:35AM
 
 ## Imputing missing values
-```{r,echo = TRUE}
+
+```r
 ## Number of missing values
 sum(is.na(data$steps))
 ```
+
+```
+## [1] 2304
+```
 The code above shows that the number of missing values is 2304. To fill in these values, we will use the mean for that time interval to replace the values. This is shown in the code below.
-```{r,echo = TRUE}
+
+```r
 dataNew <- data
 index <- 0
 for (x in dataNew$steps){
@@ -75,7 +103,8 @@ for (x in dataNew$steps){
 }
 ```
 
-```{r,echo = TRUE}
+
+```r
 ## Making Histogram
 dates <- unique(dataNew$date)
 count <- 0
@@ -88,20 +117,33 @@ for (x in dates){
 hist(dailyMeans,main = "Histogram of Mean Daily Steps Taken, NA's inputed",xlab = 'Steps Taken')
 ```
 
-```{r,echo = TRUE}
+![](PA1_template_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+
+
+```r
 ## Reporting Mean
 mean(dailyMeans,na.rm = TRUE)
 ```
 
-```{r,echo = TRUE}
+```
+## [1] 10766.19
+```
+
+
+```r
 ## Reporting Median
 median(dailyMeans,na.rm = TRUE)
+```
+
+```
+## [1] 10766.19
 ```
 
 As you can see, imputing the NA values altered the results slightly. The mean remains the same as before and the median has shifted to equal the mean.
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r,echo = TRUE}
+
+```r
 weekday <- character(0)
 index <- 0
 days <- weekdays(dataNew$date)
@@ -117,7 +159,10 @@ for(x in days){
 dataNew = cbind(dataNew,weekday)
 ```
 
-```{r,echo = TRUE}
+
+```r
 library(lattice)
 xyplot(steps~interval | weekday, data = dataNew,type = 'l',horizontal = FALSE)
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
